@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Agenda</title>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <link rel="stylesheet" href="http://simplelineicons.com/css/simple-line-icons.css"/>
+      <link rel="stylesheet" href="./css/dropzone.css"/>
+	  <link rel="stylesheet" href="./css/style.css"/>
+   </head>
+   <body>
+      <div id="agenda-section">
+      <header>
+         <div class="col-xs-11">
+            <h1 data-bind="text: meetingName"></h1>
+         </div>
+         <div class="col-xs-1 pull-right">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>User</span>
+         </div>
+      </header>
+      <section class="container">
+         <h2>Agenda</h2>
+         <div class="row">
+            <div class="col-xs-12">
+               <h3 data-bind="visible: items().length == 0">No items found</h3>
+            </div>
+            <ul id="agenda" class="col-xs-12" data-bind="foreach: items, visible: items().length > 0">
+               <li>
+                  <div class="row">
+                     <div class="col-xs-10">
+                        <span class="item-order" data-bind="text: ($index()+1)"></span>			
+                        <span class="item-description" data-bind="text: description"></span>
+                     </div>
+                     <div class="col-xs-2 text-right item-actions">
+						<i class="icon icon-doc files-popover"  role="button" data-bind="visible: files().length > 0, attr: {'data-content': filesName }" data-toggle="popover" data-placement="bottom"></i>
+                        <i class="icon icon-plus" data-bind="click: $parent.newSubItem"></i>
+                        <i class="icon icon-note" data-bind="click: $parent.editItem"></i>
+                        <i class="icon icon-trash" data-bind="click: $parent.removeItem"></i>
+                     </div>
+                  </div>
+                  <!--<ul data-bind="foreach: files">
+                     <li data-bind="text: name"></li>
+                     </ul>-->
+                  <ul data-bind="foreach: subItems, visible: subItems().length > 0" class="col-xs-12 subitems">
+                     <li>
+                        <div class="row">
+                           <div class="col-xs-10">
+                              <span class="item-order"  data-bind="text: ($index()+1)"></span>
+                              <span class="item-description" data-bind="text: description"></span>
+                           </div>
+                           <div class="col-xs-2 text-right item-actions">
+							  
+                              <i class="icon icon-note" data-bind="click: $parents[1].editItem"></i>
+                              <i class="icon icon-trash" data-bind="click: $parent.removeSubItem"></i>
+                           </div>
+                        </div>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+         </div>
+         <button class="btn btn-primary" data-bind="click: newItem">Add new item</button>
+      </section>
+      <footer>
+         <div id="actions" class="container">
+            <div class="col-xs-12 text-right">
+               <i id="upload-files-icon" class="icon-cloud-upload icon icon-2em"></i>
+            </div>
+         </div>
+      </footer>
+	  </div>
+	  <div id="modal-new-meeting" class="modal fade" tabindex="-1" role="dialog">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>
+                  <h4 class="modal-title">Start a new Meeting</h4>
+               </div>
+               <div class="modal-body">
+                  <form id="form-meeting" data-bind="submit: submitForm">
+                     <div class="row">
+                        <div class="col-xs-12">
+                           <label for="name">Name:</label>
+                           <input type="text" id="name" name="name" class="form-control" data-bind="textInput: name"/>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="modal-footer">                  
+                  <button type="submit" form="form-meeting" class="btn btn-primary">Save</button>
+               </div>
+            </div>
+         </div>
+      </div>
+	  
+	  
+      <div id="modal-agenda-item" class="modal fade" tabindex="-1" role="dialog" data-bind="event: {'hidden.bs.modal' : cancelForm}">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>
+                  <h4 class="modal-title" data-bind="text: action"></h4>
+               </div>
+               <div class="modal-body">
+                  <form id="form-item" data-bind="submit: submitForm">
+                     <div class="row">
+                        <div class="col-xs-12" data-bind="with: item">
+                           <label for="description">Description:</label>
+                           <input type="text" id="description" name="description" class="form-control" data-bind="textInput: description"/>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" form="form-item" class="btn btn-primary">Save</button>
+               </div>
+            </div>
+         </div>
+      </div>
+	  
+      <div id="confirm-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="confirm-modal">
+         <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="row">
+                  <div class="modal-body">
+                     <div id="confirm-content"></div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-xs-12 text-right">
+                     <button type="buttom" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                     <button type="buttom" id="confirm-modal-ok" class="ok-modal btn btn-primary" data-dismiss="modal">OK</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+	  
+	  
+      <div id="modal-upload-files" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="modal-upload">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="icon-close"></i></button>
+                  <h4 class="modal-title">Upload Files</h4>
+               </div>
+               <div class="modal-body">
+                  <div id="dropzone">
+                     <form action="/upload" class="dropzone needsclick dz-clickable" id="upload-widget">
+                        <div class="dz-message needsclick">
+                           Drop files here or click to upload.<br>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               </div>
+            </div>
+         </div>
+      </div>
+	  
+	  
+      <div id="upload-preview-template" style="display: none;">
+         <div class="dz-preview dz-file-preview">
+            <div class="dz-image"><img data-dz-thumbnail=""></div>
+            <div class="dz-details">
+               <div class="dz-size"><span data-dz-size=""></span></div>
+               <div class="dz-filename"><span data-dz-name=""></span></div>
+            </div>
+            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+            <div class="dz-error-message"><span data-dz-errormessage=""></span></div>
+            <div class="dz-success-mark">
+               <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                  <!-- Generator: Sketch 3.2.1 (9971) - http://www.bohemiancoding.com/sketch -->
+                  <title>Check</title>
+                  <desc>Created with Sketch.</desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                     <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+                  </g>
+               </svg>
+            </div>
+            <div class="dz-error-mark">
+               <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                  <!-- Generator: Sketch 3.2.1 (9971) - http://www.bohemiancoding.com/sketch -->
+                  <title>error</title>
+                  <desc>Created with Sketch.</desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                     <g id="Check-+-Oval-2" sketch:type="MSLayerGroup" stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+                        <path d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" sketch:type="MSShapeGroup"></path>
+                     </g>
+                  </g>
+               </svg>
+            </div>
+         </div>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script src="./js/dropzone.js"></script>
+      <script src="./js/const.js"></script>
+	  <script src="./js/AgendaItem.js"></script>
+	  <script src="./js/NewMeeting.js"></script>
+	  <script src="./js/UploadFiles.js"></script>
+	  <script src="./js/Agenda.js"></script>
+	  <script src="./js/ui.js"></script>
+	  
+   </body>
+</html>

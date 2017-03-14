@@ -1,0 +1,122 @@
+body {
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+}
+header {
+    height: 80px;
+    background: #268eff;
+    color: #f8f8f8;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 80px;
+}
+h1 {
+    font-weight: 100;
+}
+h2 {
+    font-weight: 100;
+    color: #268eff;
+    border-bottom: 1px solid #dddddd;
+}
+.hidden {
+    display: none;
+}
+h3,
+h4 {
+    font-weight: 300;
+}
+label {
+    font-weight: 300;
+    font-size: 1.2em
+}
+#alert-modal .modal-content,
+#confirm-modal .modal-content {
+    min-width: 120px;
+    min-height: 90px;
+    padding: 20px;
+    font-size: 1.1em;
+}
+#alert-modal .modal-content .modal-body,
+#confirm-modal .modal-content .modal-body {
+    padding-top: 0;
+}
+#alert-modal button,
+#confirm-modal button {
+    height: 40px;
+    min-width: 60px;
+}
+.modal-content {
+    border-radius: 0;
+}
+#agenda,
+.subitems {
+    list-style-type: none;
+}
+#agenda li {
+    min-height: 40px;
+    line-height: 40px;
+}
+#agenda > li:nth-child(even) {
+    background: #eeeeee;
+}
+#agenda > li:nth-child(odd) {
+    background: #f8f8f8;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 40px;
+    box-shadow: 0px 0px 4px #268eff;
+}
+#actions {
+    height: 100%;
+}
+.icon {
+    color: #09f;
+    margin: 3px;
+}
+.icon-2em {
+    font-size: 1.8em;
+}
+.item-order {
+    display: inline-block;
+    width: 36px;
+    text-align: center;
+    color: #FFFFFF;
+}
+#agenda .item-order {
+    background: #aaaaaa;
+    border-top: 1px solid #c1c1c1;
+}
+.item-description {
+    padding: 10px;
+}
+.item-actions i:last-child {
+    padding-right: 10px;
+}
+.subitems {
+    background: #aaaaaa;
+    padding: 0;
+}
+.subitems > li {
+    margin-left: 36px;
+    background: #dddddd;
+}
+#agenda .subitems .item-order {
+    background: #c1c1c1;
+}
+.btn {
+    border-radius: 0;
+}
+.btn-primary {
+    border: 0px;
+    background: #268eff;
+    color: #f8f8f8;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+    border: 0px
+}
